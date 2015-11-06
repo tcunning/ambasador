@@ -2,12 +2,15 @@
 http://www.django-rest-framework.org/tutorial/2-requests-and-responses/
 """
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from django.http import Http404
 from django.template import RequestContext, loader
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import permissions
+from rest_framework.renderers import JSONRenderer
 
 from referral.models import Referral
 from referral.serializers import ReferralSerializer
@@ -61,27 +64,50 @@ class ReferralDetail(APIView):
 
 # http://localhost:8000/referral/test/
 #
-class ReferralExecute(APIView):
-    def get_object(self, theName):
-        try:
-            return Referral.objects.get(name=theName)
-        except Referral.DoesNotExist:
-            raise Http404
+#class ReferralExecute(APIView):
+#    def get_object(self, theName):
+#        try:
+#            return Referral.objects.get(name=theName)
+#        except Referral.DoesNotExist:
+#            raise Http404
+#
+#    def get(self, request, theName, format=None):
+#        referral = self.get_object(theName)
+#        serializer = ReferralSerializer(referral)
+#        referral.incrementCountNow()
+#        return HttpResponseRedirect('/landing/?link=' + theName) 
+#        return Response(serializer.data)
 
-    def get(self, request, theName, format=None):
-        referral = self.get_object(theName)
+@csrf_exempt
+def referral_execute(request, theName):
+    try:
+        referral = Referral.objects.get(name=theName)
+    except Referral.DoesNotExist:
+        template = loader.get_template('referral/landingPageNotConfigured.html')
+        context = RequestContext(request, {
+            'name': theName,
+        })
+        return HttpResponse(template.render(context))
+
+    if request.method == 'GET':
         serializer = ReferralSerializer(referral)
         referral.incrementCountNow()
-        return Response(serializer.data)
-
+        return HttpResponseRedirect('/landing/?link=' + theName) 
 
 
 def landingPage(request):
     template = loader.get_template('referral/landingPage.html')
     return HttpResponse(template.render())
 
+
 def overviewPage(request):
+    referral = Referral.objects.all()
+    serializer = ReferralSerializer(referral, many=True)
+    referralJsonData = JSONRenderer().render(serializer.data)
     template = loader.get_template('referral/overviewPage.html')
-    return HttpResponse(template.render())
+    context = RequestContext(request, {
+        'referraljson': referralJsonData,
+    })
+    return HttpResponse(template.render(context))
 
 
