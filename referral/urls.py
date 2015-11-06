@@ -8,10 +8,11 @@ from referral import views
 # http://localhost:8000/referral/test2/
 # http://localhost:8000/referral
 urlpatterns = [
+    url(r'landing/$', views.landingPage),
     url(r'^referral/$', views.ReferralList.as_view()),
-    #url(r'^referral/(?P<pk>[0-9]+)/$', views.referral_detail),
     url(r'^referral/(?P<theName>[0-9A-Za-z%_.]+)/$', views.ReferralDetail.as_view()),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),     # Allow API View Login
+    url(r'^(?P<theName>[0-9A-Za-z%_.]+)/$', views.ReferralExecute.as_view()),
+    url(r'^', views.overviewPage),
 ]
 
 # Allow support for (.json or .api)

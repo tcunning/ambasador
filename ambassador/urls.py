@@ -18,28 +18,8 @@ from django.contrib import admin
 
 admin.site.site_header = 'Ambassador Referral Admin'
 
-#from rest_framework import routers, serializers, viewsets
-#from referral.models import Referral
-
-# Serializers define the API representation.
-#class ReferralSerializer(serializers.HyperlinkedModelSerializer):
-#    class Meta:
-#        model = Referral
-#        fields = ('name', 'count')
-
-# ViewSets define the view behavior.
-#class ReferralViewSet(viewsets.ModelViewSet):
-#    queryset = Referral.objects.all()
-#    serializer_class = ReferralSerializer
-#    http_method_names = ['get', 'head']
-
-# Routers provide an easy way of automatically determining the URL conf.
-#router = routers.DefaultRouter()
-#router.register(r'referrals', ReferralViewSet)
-
-
 urlpatterns = [
-    url(r'^', include('referral.urls')),
-#    url(r'^api', include(router.urls)),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),     # Allow API View Login
+    url(r'^', include('referral.urls')),
 ]

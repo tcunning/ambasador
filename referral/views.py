@@ -1,7 +1,9 @@
 """
 http://www.django-rest-framework.org/tutorial/2-requests-and-responses/
 """
+from django.http import HttpResponse
 from django.http import Http404
+from django.template import RequestContext, loader
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -39,7 +41,6 @@ class ReferralDetail(APIView):
     def get(self, request, theName, format=None):
         referral = self.get_object(theName)
         serializer = ReferralSerializer(referral)
-        referral.incrementCountNow()
         return Response(serializer.data)
 
     def put(self, request, theName, format=None):
@@ -56,3 +57,31 @@ class ReferralDetail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     permission_classes = (permissions.AllowAny,)
+
+
+# http://localhost:8000/referral/test/
+#
+class ReferralExecute(APIView):
+    def get_object(self, theName):
+        try:
+            return Referral.objects.get(name=theName)
+        except Referral.DoesNotExist:
+            raise Http404
+
+    def get(self, request, theName, format=None):
+        referral = self.get_object(theName)
+        serializer = ReferralSerializer(referral)
+        referral.incrementCountNow()
+        return Response(serializer.data)
+
+
+
+def landingPage(request):
+    template = loader.get_template('referral/landingPage.html')
+    return HttpResponse(template.render())
+
+def overviewPage(request):
+    template = loader.get_template('referral/overviewPage.html')
+    return HttpResponse(template.render())
+
+
