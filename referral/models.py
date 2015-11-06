@@ -19,3 +19,7 @@ class Referral(models.Model):
 
 	def saveName(self):
 		super(Referral, self).save(update_fields=['name'])
+		
+
+# See http://www.django-rest-framework.org/tutorial/4-authentication-and-permissions/ for
+# how to override save (to do extra work)

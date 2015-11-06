@@ -1,4 +1,5 @@
 from django.conf.urls import url
+from django.conf.urls import include
 from rest_framework.urlpatterns import format_suffix_patterns
 
 from referral import views
@@ -10,6 +11,7 @@ urlpatterns = [
     url(r'^referral/$', views.ReferralList.as_view()),
     #url(r'^referral/(?P<pk>[0-9]+)/$', views.referral_detail),
     url(r'^referral/(?P<theName>[0-9A-Za-z%_.]+)/$', views.ReferralDetail.as_view()),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),     # Allow API View Login
 ]
 
 # Allow support for (.json or .api)
