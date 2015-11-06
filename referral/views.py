@@ -1,70 +1,52 @@
-from django.shortcuts import render
-from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.renderers import JSONRenderer
-from rest_framework.parsers import JSONParser
+"""
+http://www.django-rest-framework.org/tutorial/2-requests-and-responses/
+"""
+
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 from referral.models import Referral
 from referral.serializers import ReferralSerializer
 
-
-class JSONResponse(HttpResponse):
-    """
-    An HttpResponse that renders its content into JSON.
-    """
-    def __init__(self, data, **kwargs):
-        content = JSONRenderer().render(data)
-        kwargs['content_type'] = 'application/json'
-        super(JSONResponse, self).__init__(content, **kwargs)
-
-
-"""
-List all referral, or create a new referral.
-
-Because we want to be able to POST to this view from clients that won't have a CSRF 
-token we need to mark the view as csrf_exempt
-"""
-@csrf_exempt
-def referral_list(request):
-	"""
-	"""
+# http://localhost:8000/referral/
+#
+@api_view(['GET', 'POST'])
+def referral_list(request, format=None):
 	if request.method == 'GET':
 		referral = Referral.objects.all()
 		serializer = ReferralSerializer(referral, many=True)
-		return JSONResponse(serializer.data)
+		return Response(serializer.data)
 
 	elif request.method == 'POST':
-		data = JSONParser().parse(request)
-		serializer = ReferralSerializer(data=data)
+		serializer = ReferralSerializer(data=request.data)
 		if serializer.is_valid():
 			serializer.save()
-			return JSONResponse(serializer.data, status=201)
-		return JSONResponse(serializer.errors, status=400)
+			return Response(serializer.data, status=status.HTTP_201_CREATED)
+		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-"""
-Retrieve, update or delete a referral.
-"""
-@csrf_exempt
-def referral_detail(request, theName):
+# http://localhost:8000/referral/test/
+#
+@api_view(['GET', 'PUT', 'DELETE'])
+def referral_detail(request, theName, format=None):
 	try:
 		referral = Referral.objects.get(name=theName)
 	except Referral.DoesNotExist:
-		return HttpResponse(status=404)
+		return Response(status=status.HTTP_404_NOT_FOUND)
 
 	if request.method == 'GET':
 		serializer = ReferralSerializer(referral)
 		referral.incrementCountNow()
-		return JSONResponse(serializer.data)
+		return Response(serializer.data)
 
 	elif request.method == 'PUT':
-		data = JSONParser().parse(request)
-		serializer = ReferralSerializer(referral, data=data)
+		serializer = ReferralSerializer(referral, data=request.data)
 		if serializer.is_valid():
 			serializer.save()
-			return JSONResponse(serializer.data)
-		return JSONResponse(serializer.errors, status=400)
+			return Response(serializer.data)
+		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 	elif request.method == 'DELETE':
 		referral.delete()
-		return HttpResponse(status=204)
+		return Response(status=status.HTTP_204_NO_CONTENT)
