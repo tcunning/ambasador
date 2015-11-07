@@ -1,6 +1,39 @@
-<html>
-<body>
-Hello, this is the OVERVIEW page
-{{ referraljson }}
-</body>
+{% load staticfiles %}
+<!doctype html>
+<html ng-app="overviewApp">
+  <head>
+    <link rel="stylesheet" href="{% static "referral/css/referral.css" %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
+ 
+    <script src="{% static "referral/js/overviewApp.js" %}"></script>
+    <script>
+        var initialReferrals = {{ referraljson|safe }}; //JSON.parse("{{ referraljson }}");
+    </script>
+
+  </head>
+  <body>
+    <div>
+      {% static "referral/js/overviewApp.js" %} </br>
+      {% static "referral/test.txt" %} </br>
+      {{ referraljson }}
+    </div>
+
+    <h2>Todo</h2>
+    <div ng-app="overviewApp" ng-controller="ReferralListController as referralList">
+      <form ng-submit="referralList.addReferral()">
+        <input type="text" ng-model="referralList.referralText"  size="30"
+               placeholder="referral title">
+        <input class="btn-primary" type="submit" value="add">
+      </form>
+  
+      <ul class="unstyled">
+        <li ng-repeat="referral in referralList.referrals">
+          {[{referral.name}]}, {[{referral.count}]}, 
+          <button ng-click="referralList.removeReferral(referral)">del</button>
+        </li>
+      </ul>
+    </div>
+
+  </body>
 </html>
+
