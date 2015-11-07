@@ -9,7 +9,7 @@ overviewApp.config(function($interpolateProvider) {
  
 // MARK 2
 
-overviewApp.controller('ReferralListController', ['$scope', '$window', function($scope, $window) {
+overviewApp.controller('ReferralListController', ['$scope', '$window', '$http',function($scope, $window, $http) {
     var referralList = this;
     
     referralList.referrals = $window.initialReferrals;
@@ -23,8 +23,16 @@ overviewApp.controller('ReferralListController', ['$scope', '$window', function(
     //    {text:'build an angular app', done:false}];
 
     referralList.addReferral = function() {
-        referralList.referrals.push({name:referralList.referralText, count:0});
-        referralList.referralText = '';
+        var referral = {name:referralList.referralText, count:0};
+        
+        $http.post("/referral/?format=json", referral)
+        .success(function (data, status, headers, config) {
+            referralList.referrals.push(referral);
+            referralList.referralText = '';
+        })
+        .error(function (data, status, header, config) {
+            alert("Unable to update data!");
+        });       
     };
 
     referralList.removeReferral = function(referral) {
@@ -32,7 +40,16 @@ overviewApp.controller('ReferralListController', ['$scope', '$window', function(
         referralList.referrals.splice(referralIndex,1)
     };
 
-
+    referralList.refresh = function() {
+        $http.get('/referral/?format=json')
+        .success(function (data, status, headers, config) {
+            referralList.referrals = data;
+        })
+        .error(function (data, status, header, config) {
+            alert("Unable to refresh data!");
+        });
+    };
+    
     //referralList.remaining = function() {    
     //   var count = 0;
     //   angular.forEach(referralList.todos, function(todo) {

@@ -15,9 +15,12 @@ from rest_framework.renderers import JSONRenderer
 from referral.models import Referral
 from referral.serializers import ReferralSerializer
 
+
 # http://localhost:8000/referral/
 #
 class ReferralList(APIView):
+    #permission_classes = (permissions.AllowAny,)
+    
     def get(self, request, format=None):
         referral = Referral.objects.all()
         serializer = ReferralSerializer(referral, many=True)
@@ -30,11 +33,12 @@ class ReferralList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    permission_classes = (permissions.AllowAny,)
 
 # http://localhost:8000/referral/test/
 #
 class ReferralDetail(APIView):
+    #permission_classes = (permissions.AllowAny,)
+    
     def get_object(self, theName):
         try:
             return Referral.objects.get(name=theName)
@@ -46,11 +50,12 @@ class ReferralDetail(APIView):
         serializer = ReferralSerializer(referral)
         return Response(serializer.data)
 
+	# We only allow the name to be saved via put
     def put(self, request, theName, format=None):
         referral = self.get_object(theName)
         serializer = ReferralSerializer(referral, data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.saveName()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -59,7 +64,6 @@ class ReferralDetail(APIView):
         referral.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    permission_classes = (permissions.AllowAny,)
 
 
 # http://localhost:8000/referral/test/
