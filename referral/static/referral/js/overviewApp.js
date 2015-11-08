@@ -9,13 +9,18 @@ overviewApp.config(function($interpolateProvider) {
  
 // MARK 2
 
-overviewApp.controller('ReferralListController', ['$scope', '$window', '$http',function($scope, $window, $http) {
+overviewApp.controller('ReferralListController', ['$scope', '$window', '$http', '$interval', function($scope, $window, $http, $interval) {
     var referralList = this;
 
     $scope.sortType     = 'name'; // set the default sort type
     $scope.sortReverse  = false;  // set the default sort order
     
     referralList.referrals = $window.initialReferrals;
+
+    var autoRefreshTimer=$interval(function(){
+        referralList.refresh()
+       $interval.cancel(autoRefreshTimer);
+    },(.25* 1000));  // Keep our data fresh while open
 
     referralList.addReferral = function() {
         var referral = {name:referralList.referralText, count:0};
@@ -64,6 +69,10 @@ overviewApp.controller('ReferralListController', ['$scope', '$window', '$http',f
         .error(function (data, status, header, config) {
             alert("Unable to refresh data!");
         });
-    };    
+    };
+    
+    // Load referrals
+    referralList.refresh()
+    
 }]);
 
