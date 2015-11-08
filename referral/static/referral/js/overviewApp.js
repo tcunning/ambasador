@@ -7,7 +7,7 @@ overviewApp.config(function($interpolateProvider) {
     $interpolateProvider.endSymbol('}]}');
 });
  
-// MARK 2
+
 
 overviewApp.controller('ReferralListController', ['$scope', '$window', '$http', '$interval', function($scope, $window, $http, $interval) {
     var referralList = this;
@@ -15,12 +15,14 @@ overviewApp.controller('ReferralListController', ['$scope', '$window', '$http', 
     $scope.sortType     = 'name'; // set the default sort type
     $scope.sortReverse  = false;  // set the default sort order
     
-    referralList.referrals = $window.initialReferrals;
-
+    // TODO: Currently we disable the local cache and setup a quick timer to
+    //       refresh our data.
+    referralList.referrals = [];  // $window.initialReferrals;
+    
     var autoRefreshTimer=$interval(function(){
         referralList.refresh()
        $interval.cancel(autoRefreshTimer);
-    },(.25* 1000));  // Keep our data fresh while open
+    },(.1 * 1000));
 
     referralList.addReferral = function() {
         var referral = {name:referralList.referralText, count:0};
@@ -70,9 +72,6 @@ overviewApp.controller('ReferralListController', ['$scope', '$window', '$http', 
             alert("Unable to refresh data!");
         });
     };
-    
-    // Load referrals
-    referralList.refresh()
-    
+        
 }]);
 
