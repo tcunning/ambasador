@@ -1,5 +1,11 @@
-.done-true {
-  text-decoration: line-through;
-  color: grey;
+body {
+  padding-top: 50px;
 }
-
+.referral-header {
+  padding: 0px 15px;
+  text-align: center;
+}
+.referral-body {
+  padding: 25px 15px;
+  text-align: left;
+}

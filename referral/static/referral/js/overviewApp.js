@@ -11,16 +11,11 @@ overviewApp.config(function($interpolateProvider) {
 
 overviewApp.controller('ReferralListController', ['$scope', '$window', '$http',function($scope, $window, $http) {
     var referralList = this;
+
+    $scope.sortType     = 'name'; // set the default sort type
+    $scope.sortReverse  = false;  // set the default sort order
     
     referralList.referrals = $window.initialReferrals;
-    //
-    //referralList.initialReferralRemaining = function() {
-    //   return referralList.initialReferral.count;
-    //};    
-    
-    //referralList.todos = [
-    //    {text:'learn angular', done:true},
-    //    {text:'build an angular app', done:false}];
 
     referralList.addReferral = function() {
         var referral = {name:referralList.referralText, count:0};

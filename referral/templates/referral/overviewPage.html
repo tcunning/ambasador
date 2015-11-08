@@ -1,10 +1,21 @@
 {% load staticfiles %}
 <!doctype html>
-<html ng-app="overviewApp">
+<html ng-app="overviewApp" lang="en">
   <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Ambassador Referrals</title>
+
     <link rel="stylesheet" href="{% static "referral/css/referral.css" %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" integrity="sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX" crossorigin="anonymous">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
- 
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-animate.min.js"></script>
+    <script src="{% static "referral/js/ui-bootstrap-tpls-0.14.3.js" %}"></script>
+
     <script src="{% static "referral/js/overviewApp.js" %}"></script>
     <script>
         var initialReferrals = {{ referraljson|safe }}; //JSON.parse("{{ referraljson }}");
@@ -12,27 +23,62 @@
 
   </head>
   <body>
-    <h2>Grow The Web With Referrals!</h2>
-    <div ng-app="overviewApp" ng-controller="ReferralListController as referralList">
-      <form ng-submit="referralList.addReferral()">
-        <input type="text" ng-model="referralList.referralText" size="30" placeholder="referral title">
-        <input class="btn-primary" type="submit" value="add">
-      </form>
+    <div class="container">
+        <div class="referral-header">
+            <h1>Grow The Web With Referrals!</h1>
+            <p class="lead">edit and manage your referrals</p>
+        </div>
   
-      <ul class="unstyled">
-        <li ng-repeat="referral in referralList.referrals">
-          <a href="/{[{referral.name}]}/">{[{referral.name}]}</a>, {[{referral.count}]}, 
-          <button ng-click="referralList.editReferral(referral)">edit</button>
-          <button ng-click="referralList.removeReferral(referral)">del</button>
-        </li>
-      </ul>
+        <div class="referral-body">
+            <div ng-app="overviewApp" ng-controller="ReferralListController as referralList">
+                <form ng-submit="referralList.addReferral()">
+                    <input type="text" ng-model="referralList.referralText" size="30" placeholder="referral title">
+                    <input class="btn-primary" type="submit" value="add">
+                </form>
+                </br>
+  
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr >
+                            <th class="col-sm-3">
+                                <a href="#" ng-click="sortType = 'name'; sortReverse = !sortReverse">
+                                Title
+                                <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
+                                </a>
+                            </th>
+                            <th class="col-sm-2">
+                                <a href="#" ng-click="sortType = 'count'; sortReverse = !sortReverse">
+                                Clicks
+                                <span ng-show="sortType == 'count' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'count' && sortReverse" class="fa fa-caret-up"></span>
+                                </a>
+                            </th>
+                            <th class="col-sm-1">Edit</th>
+                            <th class="col-sm-1">Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="referral in referralList.referrals | orderBy:sortType:sortReverse" >
+                            <td><a href="/{[{referral.name}]}/">{[{referral.name}]}</a></td>
+                            <td>{[{referral.count}]}</td>
+                            <td><button ng-click="referralList.editReferral(referral)">edit</button></td>
+                            <td><button ng-click="referralList.removeReferral(referral)">delete</button></td>
+                        </tr>
+                    </tbody>
+                </table>
 
-      <button ng-click="referralList.refresh()">refresh</button> </br>
-      </br>
-      <input type="text" ng-model="referralList.editName"  size="30" placeholder="edit name">
-      <input type="text" ng-model="referralList.editCount" size="30" placeholder="edit count"> </br>  
-      
-    </div>
+                <button ng-click="referralList.refresh()">refresh</button> </br>
+                </br>
+                <input type="text" ng-model="referralList.editName"  size="30" placeholder="edit name">
+                <input type="text" ng-model="referralList.editCount" size="30" placeholder="edit count"> </br>  
+                                                
+                                                
+            </div> <!-- /.ng-controller --> 
+        </div> <!-- /.referral-body -->  
+    </div> <!-- /.container -->  
+
+
 
   </body>
 </html>
