@@ -26,7 +26,7 @@ overviewApp.controller('ReferralListController', ['$scope', '$window', '$http',f
             referralList.referralText = '';
         })
         .error(function (data, status, header, config) {
-            alert("Unable to update data!");
+            alert("Unable to add referral, make sure its name is unique!");
         });       
     };
 
@@ -52,7 +52,7 @@ overviewApp.controller('ReferralListController', ['$scope', '$window', '$http',f
             referralList.editCount = ''
         })
         .error(function (data, status, header, config) {
-            alert("Unable to delete data!");
+            alert("Unable to edit data!");
         });       
     };
 

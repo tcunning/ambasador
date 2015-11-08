@@ -32,7 +32,7 @@
         <div class="referral-body">
             <div ng-app="overviewApp" ng-controller="ReferralListController as referralList">
                 <form ng-submit="referralList.addReferral()">
-                    <input type="text" ng-model="referralList.referralText" size="30" placeholder="referral title">
+                    <input type="text" ng-model="referralList.referralText" size="30" placeholder="referral title" maxlength="50">
                     <input class="btn-primary" type="submit" value="add">
                 </form>
                 </br>
@@ -69,8 +69,8 @@
                 </table>
 
                 <button ng-click="referralList.refresh()">refresh</button>
-                <input type="text" class="referral-editbutton" ng-model="referralList.editCount" size="30" placeholder="edit count">  
-                <input type="text" class="referral-editbutton" ng-model="referralList.editName"  size="30" placeholder="edit title">
+                <input type="number" class="referral-editbutton" ng-model="referralList.editCount" size="10" placeholder="edit count" maxlength="10" ng-pattern="/^[0-9]{1,7}$/">  
+                <input type="text" class="referral-editbutton" ng-model="referralList.editName"  size="30" placeholder="edit title" maxlength="50">
                                                            
             </div> <!-- /.ng-controller --> 
         </div> <!-- /.referral-body -->  

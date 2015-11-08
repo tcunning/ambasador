@@ -12,7 +12,7 @@ def validate_referral_name(value):
         raise ValidationError("name can't be %s" % value)
 
 class Referral(models.Model):
-    name = models.CharField('name', max_length=200, unique=True, validators=[validate_referral_name])
+    name = models.CharField('name', max_length=200, unique=False, validators=[validate_referral_name])
     count = models.PositiveIntegerField('count')
     
     def __str__(self):
