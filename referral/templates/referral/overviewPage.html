@@ -12,13 +12,7 @@
 
   </head>
   <body>
-    <div>
-      {% static "referral/js/overviewApp.js" %} </br>
-      {% static "referral/test.txt" %} </br>
-      {{ referraljson }}
-    </div>
-
-    <h2>Todo</h2>
+    <h2>Grow The Web With Referrals!</h2>
     <div ng-app="overviewApp" ng-controller="ReferralListController as referralList">
       <form ng-submit="referralList.addReferral()">
         <input type="text" ng-model="referralList.referralText" size="30" placeholder="referral title">
@@ -28,8 +22,8 @@
       <ul class="unstyled">
         <li ng-repeat="referral in referralList.referrals">
           <a href="/{[{referral.name}]}/">{[{referral.name}]}</a>, {[{referral.count}]}, 
-          <button ng-click="referralList.removeReferral(referral)">del</button>
           <button ng-click="referralList.editReferral(referral)">edit</button>
+          <button ng-click="referralList.removeReferral(referral)">del</button>
         </li>
       </ul>
 
