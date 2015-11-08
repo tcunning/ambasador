@@ -14,7 +14,7 @@ urlpatterns = [
     url(r'landing/?$', views.landingPage),
     url(r'^referral/$', views.ReferralList.as_view()),
     url(r'^referral/(?P<theName>[0-9A-Za-z%_.]+)/?$', views.ReferralDetail.as_view()),
-    url(r'^(?P<theName>[0-9A-Za-z%_.]+)', views.referral_execute),
+    url(r'^(?P<theName>[0-9A-Za-z_. %]+)', views.referral_execute),
     url(r'^', views.overviewPage),
 ]
 
