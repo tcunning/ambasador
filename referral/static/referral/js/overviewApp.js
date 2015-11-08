@@ -48,6 +48,8 @@ overviewApp.controller('ReferralListController', ['$scope', '$window', '$http',f
             var referralIndex = referralList.referrals.indexOf(referral)
             referral.name = referralList.editName
             referral.count = referralList.editCount
+            referralList.editName = ''
+            referralList.editCount = ''
         })
         .error(function (data, status, header, config) {
             alert("Unable to delete data!");

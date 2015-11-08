@@ -62,18 +62,16 @@
                         <tr ng-repeat="referral in referralList.referrals | orderBy:sortType:sortReverse" >
                             <td><a href="/{[{referral.name}]}/">{[{referral.name}]}</a></td>
                             <td>{[{referral.count}]}</td>
-                            <td><button ng-click="referralList.editReferral(referral)">edit</button></td>
+                            <td><button ng-click="referralList.editReferral(referral)">apply edit</button></td>
                             <td><button ng-click="referralList.removeReferral(referral)">delete</button></td>
                         </tr>
                     </tbody>
                 </table>
 
-                <button ng-click="referralList.refresh()">refresh</button> </br>
-                </br>
-                <input type="text" ng-model="referralList.editName"  size="30" placeholder="edit name">
-                <input type="text" ng-model="referralList.editCount" size="30" placeholder="edit count"> </br>  
-                                                
-                                                
+                <button ng-click="referralList.refresh()">refresh</button>
+                <input type="text" class="referral-editbutton" ng-model="referralList.editCount" size="30" placeholder="edit count">  
+                <input type="text" class="referral-editbutton" ng-model="referralList.editName"  size="30" placeholder="edit title">
+                                                           
             </div> <!-- /.ng-controller --> 
         </div> <!-- /.referral-body -->  
     </div> <!-- /.container -->  
