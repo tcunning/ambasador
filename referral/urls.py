@@ -6,7 +6,7 @@ from referral import views
 
 
 # http://localhost:8000/landing?link=<name> <== Final landing page
-# http://localhost:8000/referral            <== API (list and add)
+# http://localhost:8000/referral/           <== API (list and add)
 # http://localhost:8000/referral/<name>     <== API (get and modify)
 # http://localhost:8000/<name>              <== refer redirect
 # http://localhost:8000                     <== Overview page

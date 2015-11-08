@@ -68,7 +68,7 @@ class ReferralDetail(APIView):
 
 
 
-# http://localhost:8000/referral/test/
+# http://localhost:8000/test/
 #
 @csrf_exempt
 def referral_execute(request, theName):

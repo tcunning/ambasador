@@ -8,7 +8,7 @@ from django.core.exceptions import ValidationError
 
 def validate_referral_name(value):
     lowervalue = value.lower()
-    if lowervalue == "landing" or lowervalue == "admin":
+    if lowervalue == "landing" or lowervalue == "admin" or lowervalue == "referral":
         raise ValidationError("name can't be %s" % value)
 
 class Referral(models.Model):
