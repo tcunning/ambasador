@@ -70,20 +70,6 @@ class ReferralDetail(APIView):
 
 # http://localhost:8000/referral/test/
 #
-#class ReferralExecute(APIView):
-#    def get_object(self, theName):
-#        try:
-#            return Referral.objects.get(name=theName)
-#        except Referral.DoesNotExist:
-#            raise Http404
-#
-#    def get(self, request, theName, format=None):
-#        referral = self.get_object(theName)
-#        serializer = ReferralSerializer(referral)
-#        referral.incrementCountNow()
-#        return HttpResponseRedirect('/landing/?link=' + theName) 
-#        return Response(serializer.data)
-
 @csrf_exempt
 def referral_execute(request, theName):
     try:
@@ -102,8 +88,13 @@ def referral_execute(request, theName):
 
 
 def landingPage(request):
-    template = loader.get_template('referral/landingPage.html')
-    return HttpResponse(template.render())
+    try:
+        linkParam = request.GET['link']
+        referral = Referral.objects.get(name=linkParam)
+        template = loader.get_template('referral/landingPage.html')
+        return HttpResponse(template.render())
+    except Referral.DoesNotExist:
+		raise Http404		
 
 
 def overviewPage(request):
