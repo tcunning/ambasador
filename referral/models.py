@@ -4,9 +4,15 @@
 #
 from django.db import models
 from django.db.models import F
+from django.core.exceptions import ValidationError
+
+def validate_referral_name(value):
+    lowervalue = value.lower()
+    if lowervalue == "landing" or lowervalue == "admin":
+        raise ValidationError("name can't be %s" % value)
 
 class Referral(models.Model):
-    name = models.CharField('name', max_length=200, unique=True)
+    name = models.CharField('name', max_length=200, unique=True, validators=[validate_referral_name])
     count = models.PositiveIntegerField('count')
     
     def __str__(self):
