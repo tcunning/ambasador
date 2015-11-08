@@ -19,7 +19,7 @@ from django.contrib import admin
 admin.site.site_header = 'Ambassador Referral Admin'
 
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/?$', include(admin.site.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),     # Allow API View Login
     url(r'^', include('referral.urls')),
 ]

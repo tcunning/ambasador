@@ -36,8 +36,27 @@ overviewApp.controller('ReferralListController', ['$scope', '$window', '$http',f
     };
 
     referralList.removeReferral = function(referral) {
-        var referralIndex = referralList.referrals.indexOf(referral)
-        referralList.referrals.splice(referralIndex,1)
+        $http.delete("/referral/" + referral.name + "/?format=json")
+        .success(function (data, status, headers, config) {
+            var referralIndex = referralList.referrals.indexOf(referral)
+            referralList.referrals.splice(referralIndex,1)
+        })
+        .error(function (data, status, header, config) {
+            alert("Unable to delete data!");
+        });       
+    };
+
+    referralList.editReferral = function(referral) {
+        var replacementReferral = {name:referralList.editName, count:referralList.editCount};
+        $http.put("/referral/" + referral.name + "/?format=json", replacementReferral)
+        .success(function (data, status, headers, config) {
+            var referralIndex = referralList.referrals.indexOf(referral)
+            referral.name = referralList.editName
+            referral.count = referralList.editCount
+        })
+        .error(function (data, status, header, config) {
+            alert("Unable to delete data!");
+        });       
     };
 
     referralList.refresh = function() {
@@ -48,22 +67,6 @@ overviewApp.controller('ReferralListController', ['$scope', '$window', '$http',f
         .error(function (data, status, header, config) {
             alert("Unable to refresh data!");
         });
-    };
-    
-    //referralList.remaining = function() {    
-    //   var count = 0;
-    //   angular.forEach(referralList.todos, function(todo) {
-    //      count += todo.done ? 0 : 1;
-    //   });
-    //   return count;
-    //};
-
-    //referralList.archive = function() {
-    //   var oldTodos = referralList.todos;
-    //   referralList.todos = [];
-    //   angular.forEach(oldTodos, function(todo) {
-    //      if (!todo.done) referralList.todos.push(todo);
-    //   });
-    //};
+    };    
 }]);
 

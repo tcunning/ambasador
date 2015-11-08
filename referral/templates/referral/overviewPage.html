@@ -21,18 +21,23 @@
     <h2>Todo</h2>
     <div ng-app="overviewApp" ng-controller="ReferralListController as referralList">
       <form ng-submit="referralList.addReferral()">
-        <input type="text" ng-model="referralList.referralText"  size="30"
-               placeholder="referral title">
+        <input type="text" ng-model="referralList.referralText" size="30" placeholder="referral title">
         <input class="btn-primary" type="submit" value="add">
       </form>
   
       <ul class="unstyled">
         <li ng-repeat="referral in referralList.referrals">
-          {[{referral.name}]}, {[{referral.count}]}, 
+          <a href="/{[{referral.name}]}/">{[{referral.name}]}</a>, {[{referral.count}]}, 
           <button ng-click="referralList.removeReferral(referral)">del</button>
+          <button ng-click="referralList.editReferral(referral)">edit</button>
         </li>
       </ul>
-      <button ng-click="referralList.refresh()">refresh</button>
+
+      <button ng-click="referralList.refresh()">refresh</button> </br>
+      </br>
+      <input type="text" ng-model="referralList.editName"  size="30" placeholder="edit name">
+      <input type="text" ng-model="referralList.editCount" size="30" placeholder="edit count"> </br>  
+      
     </div>
 
   </body>

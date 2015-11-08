@@ -50,14 +50,16 @@ class ReferralDetail(APIView):
         serializer = ReferralSerializer(referral)
         return Response(serializer.data)
 
-	# We only allow the name to be saved via put
+    # We only allow the name to be saved via put
     def put(self, request, theName, format=None):
-        referral = self.get_object(theName)
-        serializer = ReferralSerializer(referral, data=request.data)
-        if serializer.is_valid():
-            serializer.saveName()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            referral = self.get_object(theName)
+            referral.name = request.data["name"]
+            referral.count = int(request.data["count"])
+            referral.save()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except ValueError:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, theName, format=None):
         referral = self.get_object(theName)

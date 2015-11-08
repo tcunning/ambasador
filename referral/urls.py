@@ -5,13 +5,16 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from referral import views
 
 
-# http://localhost:8000/referral
-# http://localhost:8000/referral/test2/
+# http://localhost:8000/landing?link=<name> <== Final landing page
+# http://localhost:8000/referral            <== API (list and add)
+# http://localhost:8000/referral/<name>     <== API (get and modify)
+# http://localhost:8000/<name>              <== refer redirect
+# http://localhost:8000                     <== Overview page
 urlpatterns = [
-    url(r'landing/$', views.landingPage),
+    url(r'landing/?$', views.landingPage),
     url(r'^referral/$', views.ReferralList.as_view()),
-    url(r'^referral/(?P<theName>[0-9A-Za-z%_.]+)/$', views.ReferralDetail.as_view()),
-    url(r'^(?P<theName>[0-9A-Za-z%_.]+)/$', views.referral_execute),
+    url(r'^referral/(?P<theName>[0-9A-Za-z%_.]+)/?$', views.ReferralDetail.as_view()),
+    url(r'^(?P<theName>[0-9A-Za-z%_.]+)', views.referral_execute),
     url(r'^', views.overviewPage),
 ]
 
